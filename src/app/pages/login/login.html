@@ -1,0 +1,35 @@
+<div class="auth">
+  <div class="auth__card card fade-in-up">
+    <div class="auth__head">
+      <app-logo />
+      <h1>Iniciar sesión</h1>
+      <p class="text-muted">Ingresa para administrar tu tienda.</p>
+    </div>
+
+    @if (error()) { <div class="alert alert-error">{{ error() }}</div> }
+
+    <form [formGroup]="form" (ngSubmit)="entrar()">
+      <div class="field">
+        <label class="label">Email</label>
+        <input class="input" type="email" formControlName="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <div class="field-error">Ingresa un email válido.</div>
+        }
+      </div>
+      <div class="field">
+        <label class="label">Contraseña</label>
+        <input class="input" type="password" formControlName="password" placeholder="••••••••" autocomplete="current-password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <div class="field-error">Ingresa tu contraseña.</div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+        @if (enviando()) { <span class="spinner spinner--btn"></span> Ingresando… }
+        @else { Ingresar }
+      </button>
+    </form>
+
+    <p class="auth__alt">¿No tienes cuenta? <a routerLink="/registro">Crear cuenta</a></p>
+  </div>
+</div>

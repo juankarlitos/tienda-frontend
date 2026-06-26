@@ -1,0 +1,42 @@
+<div class="auth">
+  <div class="auth__card card fade-in-up">
+    <div class="auth__head">
+      <app-logo />
+      <h1>Crear cuenta</h1>
+      <p class="text-muted">Regístrate para comprar más rápido.</p>
+    </div>
+
+    @if (error()) { <div class="alert alert-error">{{ error() }}</div> }
+
+    <form [formGroup]="form" (ngSubmit)="registrar()">
+      <div class="field">
+        <label class="label">Nombre</label>
+        <input class="input" formControlName="nombre" placeholder="Tu nombre" autocomplete="name" />
+        @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+          <div class="field-error">Ingresa tu nombre.</div>
+        }
+      </div>
+      <div class="field">
+        <label class="label">Email</label>
+        <input class="input" type="email" formControlName="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <div class="field-error">Ingresa un email válido.</div>
+        }
+      </div>
+      <div class="field">
+        <label class="label">Contraseña</label>
+        <input class="input" type="password" formControlName="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <div class="field-error">La contraseña debe tener al menos 6 caracteres.</div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+        @if (enviando()) { <span class="spinner spinner--btn"></span> Creando… }
+        @else { Crear cuenta }
+      </button>
+    </form>
+
+    <p class="auth__alt">¿Ya tienes cuenta? <a routerLink="/login">Iniciar sesión</a></p>
+  </div>
+</div>

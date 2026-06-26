@@ -1,0 +1,60 @@
+<div class="container page">
+  <a routerLink="/" class="volver">← Volver al catálogo</a>
+
+  @if (cargando()) {
+    <app-spinner mensaje="Cargando producto…" />
+  } @else if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+    <a routerLink="/" class="btn btn-outline">Ir al catálogo</a>
+  } @else if (producto(); as p) {
+    <div class="detalle">
+      <div class="detalle__galeria">
+        <div class="detalle__media">
+          @if (imagenActiva()) {
+            <img [src]="imagenActiva()" [alt]="p.nombre" />
+          } @else {
+            <div class="detalle__placeholder">📦</div>
+          }
+        </div>
+        @if (p.imagenes && p.imagenes.length > 1) {
+          <div class="detalle__thumbs">
+            @for (img of p.imagenes; track img) {
+              <button class="thumb" [class.thumb--active]="img === imagenActiva()" (click)="seleccionarImagen(img)">
+                <img [src]="img" [alt]="p.nombre" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="detalle__info">
+        @if (p.categoriaNombre) { <span class="badge">{{ p.categoriaNombre }}</span> }
+        <h1>{{ p.nombre }}</h1>
+        <div class="detalle__precio precio">{{ p.precio | clp }}</div>
+
+        @if (p.stock > 0) {
+          <span class="badge success">✓ {{ p.stock }} disponibles</span>
+        } @else {
+          <span class="badge danger">Agotado</span>
+        }
+
+        @if (p.descripcion) {
+          <p class="detalle__desc">{{ p.descripcion }}</p>
+        }
+
+        @if (p.stock > 0) {
+          <div class="detalle__compra">
+            <div class="qty">
+              <button (click)="cambiarCantidad(-1)" [disabled]="cantidad() <= 1" aria-label="Menos">−</button>
+              <span>{{ cantidad() }}</span>
+              <button (click)="cambiarCantidad(1)" [disabled]="cantidad() >= p.stock" aria-label="Más">+</button>
+            </div>
+            <button class="btn btn-primary" (click)="agregar()">Agregar al carrito</button>
+          </div>
+        } @else {
+          <button class="btn btn-dark" disabled>Producto agotado</button>
+        }
+      </div>
+    </div>
+  }
+</div>

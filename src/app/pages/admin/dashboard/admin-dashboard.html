@@ -1,0 +1,71 @@
+<div class="adm-page">
+  <header class="adm-page__head">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="text-muted">Resumen de ventas y pedidos de tu tienda.</p>
+    </div>
+    <button class="btn btn-outline btn-sm" (click)="cargar()">↻ Actualizar</button>
+  </header>
+
+  @if (cargando()) {
+    <app-spinner mensaje="Cargando métricas…" />
+  } @else if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+    <button class="btn btn-outline" (click)="cargar()">Reintentar</button>
+  } @else if (data(); as d) {
+
+    <!-- Tarjetas principales -->
+    <section class="cards">
+      <div class="metric metric--brand">
+        <span class="metric__ico">💰</span>
+        <div>
+          <span class="metric__label">Ventas totales</span>
+          <span class="metric__valor">{{ d.totalVentas | clp }}</span>
+        </div>
+      </div>
+      <div class="metric metric--accent">
+        <span class="metric__ico">📅</span>
+        <div>
+          <span class="metric__label">Ingresos del mes</span>
+          <span class="metric__valor">{{ d.ingresosDelMes | clp }}</span>
+        </div>
+      </div>
+      <div class="metric">
+        <span class="metric__ico">🧾</span>
+        <div>
+          <span class="metric__label">Total de pedidos</span>
+          <span class="metric__valor">{{ d.totalPedidos }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pedidos por estado -->
+    <h2 class="adm-sub">Pedidos por estado</h2>
+    <section class="estados">
+      @for (e of estados(); track e.key) {
+        <div class="estado-card estado--{{ e.clase }}">
+          <span class="estado-card__valor">{{ e.valor }}</span>
+          <span class="estado-card__label">{{ e.label }}</span>
+        </div>
+      }
+    </section>
+
+    <!-- Gráfico: productos más vendidos -->
+    <h2 class="adm-sub">Productos más vendidos</h2>
+    <section class="card card-pad chart">
+      @if (barras().length === 0) {
+        <p class="text-muted text-center">Aún no hay ventas registradas.</p>
+      } @else {
+        @for (b of barras(); track b.nombre) {
+          <div class="chart__row">
+            <span class="chart__name" [title]="b.nombre">{{ b.nombre }}</span>
+            <div class="chart__track">
+              <div class="chart__bar" [style.width.%]="b.pct"></div>
+            </div>
+            <span class="chart__val">{{ b.cantidad }}</span>
+          </div>
+        }
+      }
+    </section>
+  }
+</div>

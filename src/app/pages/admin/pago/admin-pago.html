@@ -1,0 +1,54 @@
+<div class="adm-page">
+  <header class="adm-page__head">
+    <div>
+      <h1>Datos de pago</h1>
+      <p class="text-muted">Estos datos se muestran al cliente cuando elige pagar por transferencia.</p>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <app-spinner mensaje="Cargando datos…" />
+  } @else {
+    @if (error()) { <div class="alert alert-error">{{ error() }}</div> }
+
+    <form class="card card-pad pago-form" [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="grid-2">
+        <div class="field">
+          <label class="label">Banco</label>
+          <input class="input" formControlName="bancoNombre" placeholder="Ej: Banco Estado" />
+        </div>
+        <div class="field">
+          <label class="label">Tipo de cuenta</label>
+          <input class="input" formControlName="tipoCuenta" placeholder="Ej: Cuenta RUT" />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label class="label">N° de cuenta</label>
+          <input class="input" formControlName="numeroCuenta" placeholder="Ej: 12345678" />
+        </div>
+        <div class="field">
+          <label class="label">RUT titular</label>
+          <input class="input" formControlName="rutTitular" placeholder="Ej: 12.345.678-9" />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label class="label">Nombre del titular</label>
+          <input class="input" formControlName="nombreTitular" placeholder="Nombre y apellido" />
+        </div>
+        <div class="field">
+          <label class="label">Email del titular</label>
+          <input class="input" type="email" formControlName="emailTitular" placeholder="correo@ejemplo.com" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+        @if (guardando()) { <span class="spinner spinner--btn"></span> Guardando… }
+        @else { Guardar cambios }
+      </button>
+    </form>
+  }
+</div>

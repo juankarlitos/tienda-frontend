@@ -1,0 +1,6 @@
+.pago-form { max-width: 640px; display: flex; flex-direction: column; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+@media (max-width: 540px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}

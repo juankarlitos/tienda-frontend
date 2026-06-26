@@ -1,0 +1,162 @@
+<div class="adm-page">
+  <header class="adm-page__head">
+    <div>
+      <h1>Productos</h1>
+      <p class="text-muted">Crea, edita y administra el catálogo.</p>
+    </div>
+    <button class="btn btn-primary" (click)="abrirNuevo()">+ Nuevo producto</button>
+  </header>
+
+  @if (cargando()) {
+    <app-spinner mensaje="Cargando productos…" />
+  } @else if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+    <button class="btn btn-outline" (click)="cargar()">Reintentar</button>
+  } @else if (productos().length === 0) {
+    <div class="empty-state">
+      <div class="emoji">📦</div>
+      <h3>Sin productos</h3>
+      <p>Crea tu primer producto con el botón “Nuevo producto”.</p>
+    </div>
+  } @else {
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of productos(); track p.id) {
+            <tr>
+              <td>
+                <div class="prod-cel">
+                  <div class="prod-cel__img">
+                    @if (p.imagenUrl) { <img [src]="p.imagenUrl" [alt]="p.nombre" /> }
+                    @else { <span>📦</span> }
+                  </div>
+                  <span class="prod-cel__name">{{ p.nombre }}</span>
+                </div>
+              </td>
+              <td>{{ p.categoriaNombre || '—' }}</td>
+              <td class="precio">{{ p.precio | clp }}</td>
+              <td>{{ p.stock }}</td>
+              <td>
+                @if (p.activo) { <span class="badge success">Activo</span> }
+                @else { <span class="badge danger">Inactivo</span> }
+              </td>
+              <td>
+                <div class="acciones">
+                  <button class="btn btn-ghost btn-sm" (click)="abrirEdicion(p)">Editar</button>
+                  <button class="btn btn-ghost btn-sm acc-del" (click)="eliminar(p)">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<!-- ============ Modal alta/edición ============ -->
+@if (modalAbierto()) {
+  <div class="modal-backdrop" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal__head">
+        <h3>{{ editandoId() ? 'Editar producto' : 'Nuevo producto' }}</h3>
+        <button class="modal__close" (click)="cerrarModal()" aria-label="Cerrar">×</button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="modal__body">
+          <!-- Imágenes (galería, hasta 10) -->
+          <div class="field">
+            <label class="label">Imágenes ({{ imagenes().length }}/{{ maxImagenes }})</label>
+            <div class="galeria">
+              @for (img of imagenes(); track img; let i = $index) {
+                <div class="galeria__item" [class.galeria__item--principal]="i === 0">
+                  <img [src]="img" [alt]="'Imagen ' + (i + 1)" />
+                  @if (i === 0) { <span class="galeria__tag">Principal</span> }
+                  <div class="galeria__acciones">
+                    @if (i !== 0) {
+                      <button type="button" title="Marcar como principal" (click)="hacerPrincipal(i)">★</button>
+                    }
+                    <button type="button" title="Quitar" class="galeria__del" (click)="quitarImagen(i)">🗑</button>
+                  </div>
+                </div>
+              }
+
+              @if (subiendoImagen()) {
+                <div class="galeria__item galeria__loading"><div class="spinner"></div></div>
+              }
+
+              @if (imagenes().length < maxImagenes) {
+                <label class="galeria__add">
+                  <span>＋</span>
+                  <small>Subir fotos</small>
+                  <input type="file" accept="image/*" multiple hidden (change)="alSeleccionarArchivos($event)" />
+                </label>
+              }
+            </div>
+            <small class="text-muted">Hasta {{ maxImagenes }} fotos. La primera (★) es la principal. JPG o PNG.</small>
+          </div>
+
+          <div class="field">
+            <label class="label">Nombre *</label>
+            <input class="input" formControlName="nombre" placeholder="Nombre del producto" />
+            @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+              <div class="field-error">El nombre es obligatorio.</div>
+            }
+          </div>
+
+          <div class="field">
+            <label class="label">Descripción</label>
+            <textarea class="textarea" formControlName="descripcion" placeholder="Descripción del producto"></textarea>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label class="label">Precio (CLP) *</label>
+              <input class="input" type="number" min="0" formControlName="precio" />
+              @if (form.controls.precio.touched && form.controls.precio.invalid) {
+                <div class="field-error">Ingresa un precio válido.</div>
+              }
+            </div>
+            <div class="field">
+              <label class="label">Stock *</label>
+              <input class="input" type="number" min="0" formControlName="stock" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label class="label">Categoría</label>
+              <select class="select" formControlName="categoriaId">
+                <option [ngValue]="null">Sin categoría</option>
+                @for (c of categorias(); track c.id) {
+                  <option [ngValue]="c.id">{{ c.nombre }}</option>
+                }
+              </select>
+            </div>
+            <div class="field">
+              <label class="label">Visible en catálogo</label>
+              <label class="switch">
+                <input type="checkbox" formControlName="activo" />
+                <span>Producto activo</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal__foot">
+          <button type="button" class="btn btn-ghost" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="guardando() || subiendoImagen()">
+            @if (guardando()) { <span class="spinner spinner--btn"></span> Guardando… }
+            @else { Guardar }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

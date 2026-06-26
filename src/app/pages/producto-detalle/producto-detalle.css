@@ -1,0 +1,45 @@
+.volver { display: inline-block; color: var(--muted); font-weight: 500; margin-bottom: 18px; }
+.volver:hover { color: var(--brand-2); }
+
+.detalle { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+
+.detalle__galeria { display: flex; flex-direction: column; gap: 12px; }
+.detalle__media {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg);
+  overflow: hidden; aspect-ratio: 1; box-shadow: var(--shadow-sm);
+}
+.detalle__media img { width: 100%; height: 100%; object-fit: cover; animation: fadeInUp .3s ease; }
+.detalle__placeholder { width: 100%; height: 100%; display: grid; place-items: center; font-size: 5rem; opacity: .4; }
+
+.detalle__thumbs {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.thumb {
+  width: 72px; height: 72px; padding: 0; border-radius: 12px; overflow: hidden; cursor: pointer;
+  border: 2px solid var(--border); background: #f1f1f7; transition: border-color .15s ease, transform .15s ease;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb:hover { transform: translateY(-2px); }
+.thumb--active { border-color: var(--brand-2); box-shadow: 0 0 0 3px rgba(79,70,229,.15); }
+
+.detalle__info { display: flex; flex-direction: column; gap: 14px; padding-top: 6px; }
+.detalle__info h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem); margin: 4px 0 0; }
+.detalle__precio { font-size: 2rem; }
+.detalle__desc { color: #475569; line-height: 1.7; margin: 6px 0; }
+
+.detalle__compra { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 10px; }
+.qty {
+  display: inline-flex; align-items: center; border: 1.5px solid var(--border);
+  border-radius: 999px; overflow: hidden; background: #fff;
+}
+.qty button {
+  width: 42px; height: 44px; border: none; background: transparent; cursor: pointer;
+  font-size: 1.3rem; color: var(--brand-2); transition: background .15s ease;
+}
+.qty button:hover:not(:disabled) { background: var(--brand-soft); }
+.qty button:disabled { opacity: .35; cursor: not-allowed; }
+.qty span { min-width: 44px; text-align: center; font-weight: 700; font-size: 1.05rem; }
+
+@media (max-width: 760px) {
+  .detalle { grid-template-columns: 1fr; gap: 22px; }
+}

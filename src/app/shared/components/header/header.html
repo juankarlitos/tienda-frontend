@@ -1,0 +1,51 @@
+<header class="hdr">
+  <div class="container hdr__inner">
+    <a routerLink="/" class="hdr__brand" (click)="cerrarMenu()">
+      <app-logo />
+    </a>
+
+    <!-- Navegación principal -->
+    <nav class="hdr__nav" [class.is-open]="menuAbierto()">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="cerrarMenu()">Catálogo</a>
+      <a routerLink="/como-comprar" routerLinkActive="active" (click)="cerrarMenu()">Cómo comprar</a>
+
+      @if (auth.esAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active" (click)="cerrarMenu()">Panel admin</a>
+      }
+
+      <!-- Acciones dentro del menú (visibles en móvil) -->
+      <div class="hdr__nav-actions">
+        @if (auth.estaAutenticado()) {
+          <span class="hdr__user">Hola, {{ auth.usuario()?.nombre }}</span>
+          <button class="btn btn-outline btn-sm" (click)="cerrarSesion()">Cerrar sesión</button>
+        } @else {
+          <a routerLink="/login" class="btn btn-outline btn-sm" (click)="cerrarMenu()">Ingresar</a>
+          <a routerLink="/registro" class="btn btn-primary btn-sm" (click)="cerrarMenu()">Crear cuenta</a>
+        }
+      </div>
+    </nav>
+
+    <div class="hdr__right">
+      <!-- Carrito -->
+      <a routerLink="/carrito" class="hdr__cart" aria-label="Ver carrito" (click)="cerrarMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        @if (cart.cantidadTotal() > 0) {
+          <span class="hdr__badge">{{ cart.cantidadTotal() }}</span>
+        }
+      </a>
+
+      <!-- Botón hamburguesa (solo móvil) -->
+      <button class="hdr__burger" [class.is-open]="menuAbierto()" (click)="toggleMenu()" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Capa para cerrar el menú al tocar fuera (móvil) -->
+  @if (menuAbierto()) {
+    <div class="hdr__overlay" (click)="cerrarMenu()"></div>
+  }
+</header>

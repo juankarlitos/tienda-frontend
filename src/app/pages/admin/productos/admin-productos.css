@@ -1,0 +1,55 @@
+.prod-cel { display: flex; align-items: center; gap: 11px; }
+.prod-cel__img {
+  width: 46px; height: 46px; border-radius: 10px; flex: none; overflow: hidden;
+  background: #f1f1f7; display: grid; place-items: center; font-size: 1.3rem;
+}
+.prod-cel__img img { width: 100%; height: 100%; object-fit: cover; }
+.prod-cel__name { font-weight: 600; }
+
+.acciones { display: flex; gap: 4px; }
+.acc-del { color: var(--danger); }
+.acc-del:hover { background: var(--danger-soft); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* Galería de imágenes */
+.galeria { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+.galeria__item {
+  position: relative; width: 92px; height: 92px; border-radius: 12px; overflow: hidden;
+  border: 1.5px solid var(--border); background: #f1f1f7;
+}
+.galeria__item--principal { border: 2px solid var(--brand-2); box-shadow: 0 0 0 3px rgba(79,70,229,.15); }
+.galeria__item img { width: 100%; height: 100%; object-fit: cover; }
+.galeria__tag {
+  position: absolute; left: 4px; bottom: 4px; font-size: .64rem; font-weight: 700;
+  background: var(--brand-2); color: #fff; padding: 2px 7px; border-radius: 999px;
+}
+.galeria__acciones {
+  position: absolute; top: 4px; right: 4px; display: flex; gap: 4px;
+}
+.galeria__acciones button {
+  width: 24px; height: 24px; border: none; border-radius: 7px; cursor: pointer;
+  background: rgba(255,255,255,.92); font-size: .8rem; display: grid; place-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.galeria__acciones button:hover { background: #fff; }
+.galeria__del:hover { background: var(--danger-soft); }
+.galeria__loading { display: grid; place-items: center; }
+.galeria__loading .spinner { width: 28px; height: 28px; border-width: 3px; }
+.galeria__add {
+  width: 92px; height: 92px; border-radius: 12px; cursor: pointer;
+  border: 1.5px dashed var(--border); background: #fafbff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  color: var(--brand-2); transition: all .15s ease;
+}
+.galeria__add:hover { border-color: var(--brand-2); background: var(--brand-soft); }
+.galeria__add span { font-size: 1.6rem; line-height: 1; }
+.galeria__add small { font-size: .68rem; color: var(--muted); }
+
+/* Switch */
+.switch { display: flex; align-items: center; gap: 9px; cursor: pointer; padding-top: 9px; }
+.switch input { width: 18px; height: 18px; accent-color: var(--brand-2); }
+
+@media (max-width: 480px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}

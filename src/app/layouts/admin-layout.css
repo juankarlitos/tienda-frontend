@@ -1,0 +1,50 @@
+.adm { min-height: 100vh; background: var(--bg); }
+
+/* Sidebar */
+.adm__side {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 250px; z-index: 60;
+  background: #0f1424; color: #cbd2e0;
+  display: flex; flex-direction: column; padding: 22px 16px;
+}
+.adm__side-head { display: flex; flex-direction: column; gap: 10px; padding: 4px 8px 20px; }
+.adm__pill {
+  align-self: flex-start; font-size: .72rem; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; color: #c4b5fd; background: rgba(124,58,237,.18);
+  padding: 3px 9px; border-radius: 999px;
+}
+.adm__nav { display: flex; flex-direction: column; gap: 4px; }
+.adm__nav a {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 13px; border-radius: 11px;
+  color: #aeb7cc; font-weight: 500; font-size: .94rem;
+  transition: background .15s ease, color .15s ease;
+}
+.adm__nav a .ico { font-size: 1.05rem; }
+.adm__nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.adm__nav a.active { background: var(--brand-grad); color: #fff; box-shadow: var(--shadow); }
+
+.adm__side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 18px; }
+.adm__back { color: #94a0b8; font-size: .88rem; }
+.adm__back:hover { color: #fff; }
+.adm__user { color: #fff; font-weight: 600; font-size: .9rem; }
+
+/* Contenido */
+.adm__main { margin-left: 250px; padding: 28px; min-height: 100vh; }
+
+/* Topbar móvil */
+.adm__topbar {
+  display: none; align-items: center; gap: 12px;
+  height: 60px; padding: 0 14px; background: #fff; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 40;
+}
+.adm__burger { border: none; background: transparent; cursor: pointer; color: var(--ink); display: grid; place-items: center; }
+.adm__topbar-tag { margin-left: auto; font-size: .72rem; font-weight: 700; color: var(--brand); background: var(--brand-soft); padding: 4px 10px; border-radius: 999px; }
+.adm__overlay { display: none; }
+
+@media (max-width: 880px) {
+  .adm__topbar { display: flex; }
+  .adm__main { margin-left: 0; padding: 18px 14px 40px; }
+  .adm__side { transform: translateX(-105%); transition: transform .28s ease; box-shadow: 8px 0 30px rgba(0,0,0,.25); }
+  .adm__side.is-open { transform: none; }
+  .adm__overlay { display: block; position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 50; }
+}

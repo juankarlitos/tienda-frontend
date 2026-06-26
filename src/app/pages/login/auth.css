@@ -1,0 +1,14 @@
+.auth {
+  min-height: calc(100vh - var(--header-h));
+  display: grid; place-items: center; padding: 40px 20px;
+  background:
+    radial-gradient(60% 50% at 100% 0%, rgba(124,58,237,.10), transparent),
+    radial-gradient(60% 50% at 0% 100%, rgba(245,158,11,.10), transparent);
+}
+.auth__card { width: 100%; max-width: 420px; padding: 32px; }
+.auth__head { text-align: center; margin-bottom: 22px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.auth__head h1 { font-size: 1.5rem; margin: 10px 0 0; }
+.auth__head p { margin: 0; }
+.auth__alt { text-align: center; margin: 18px 0 0; color: var(--muted); font-size: .92rem; }
+.auth__alt a { color: var(--brand-2); font-weight: 600; }
+.spinner--btn { width: 18px; height: 18px; border-width: 2.5px; border-color: rgba(255,255,255,.4); border-top-color: #fff; }

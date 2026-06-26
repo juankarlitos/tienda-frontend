@@ -1,0 +1,53 @@
+<div class="container page">
+  <h1 class="section-title">¿Cómo comprar?</h1>
+  <p class="section-sub">Comprar en InostraTech es muy simple. No hay pago en línea: coordinas directamente con el vendedor.</p>
+
+  <div class="pasos">
+    <div class="paso card card-pad">
+      <span class="paso__num">1</span>
+      <h3>Arma tu carrito</h3>
+      <p>Explora el catálogo y agrega los productos que quieras. Puedes ajustar las cantidades en el carrito.</p>
+    </div>
+    <div class="paso card card-pad">
+      <span class="paso__num">2</span>
+      <h3>Confirma tu pedido</h3>
+      <p>Completa tus datos en el checkout y elige cómo pagar: efectivo o transferencia.</p>
+    </div>
+    <div class="paso card card-pad">
+      <span class="paso__num">3</span>
+      <h3>Coordina por WhatsApp</h3>
+      <p>Al confirmar, te damos un botón para enviar tu pedido por WhatsApp y coordinar la entrega y el pago.</p>
+    </div>
+  </div>
+
+  <div class="pagos">
+    <div class="pago-box card card-pad">
+      <div class="pago-box__ico">💵</div>
+      <h3>Efectivo</h3>
+      <p>Pagas en efectivo cuando te juntas con el vendedor para recibir tu producto. Simple y directo.</p>
+    </div>
+
+    <div class="pago-box card card-pad">
+      <div class="pago-box__ico">🏦</div>
+      <h3>Transferencia</h3>
+      <p>Transfieres a la cuenta del vendedor y coordinan la entrega. Estos son los datos:</p>
+      @if (transferencia(); as t) {
+        <dl class="transfer__list">
+          <div><dt>Banco</dt><dd>{{ t.bancoNombre || '—' }}</dd></div>
+          <div><dt>Tipo de cuenta</dt><dd>{{ t.tipoCuenta || '—' }}</dd></div>
+          <div><dt>N° de cuenta</dt><dd>{{ t.numeroCuenta || '—' }}</dd></div>
+          <div><dt>RUT</dt><dd>{{ t.rutTitular || '—' }}</dd></div>
+          <div><dt>Titular</dt><dd>{{ t.nombreTitular || '—' }}</dd></div>
+          <div><dt>Email</dt><dd>{{ t.emailTitular || '—' }}</dd></div>
+        </dl>
+      } @else {
+        <p class="text-muted">Cargando datos…</p>
+      }
+    </div>
+  </div>
+
+  <div class="cta-final">
+    <h2>¿Listo para comprar?</h2>
+    <a routerLink="/" class="btn btn-primary">Ver catálogo</a>
+  </div>
+</div>

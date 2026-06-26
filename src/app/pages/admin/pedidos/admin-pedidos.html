@@ -1,0 +1,93 @@
+<div class="adm-page">
+  <header class="adm-page__head">
+    <div>
+      <h1>Pedidos</h1>
+      <p class="text-muted">Revisa los pedidos y actualiza su estado.</p>
+    </div>
+    <button class="btn btn-outline btn-sm" (click)="cargar()">↻ Actualizar</button>
+  </header>
+
+  @if (cargando()) {
+    <app-spinner mensaje="Cargando pedidos…" />
+  } @else if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+    <button class="btn btn-outline" (click)="cargar()">Reintentar</button>
+  } @else if (pedidos().length === 0) {
+    <div class="empty-state">
+      <div class="emoji">🧾</div>
+      <h3>Aún no hay pedidos</h3>
+      <p>Cuando un cliente confirme una compra, aparecerá aquí.</p>
+    </div>
+  } @else {
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr><th>#</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Pago</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody>
+          @for (p of pedidos(); track p.id) {
+            <tr>
+              <td><strong>{{ p.numeroPedido }}</strong></td>
+              <td>
+                <strong>{{ p.nombreCliente }}</strong><br>
+                <small class="text-muted">{{ p.telefonoCliente }}</small>
+              </td>
+              <td>{{ p.fechaCreacion | date:'dd/MM/yy HH:mm' }}</td>
+              <td class="precio">{{ p.total | clp }}</td>
+              <td>{{ p.metodoPago === 'TRANSFERENCIA' ? '🏦' : '💵' }} {{ p.metodoPago }}</td>
+              <td>
+                <select class="select select-estado estado-{{ claseEstado(p.estado) }}"
+                        [value]="p.estado" (change)="alCambiarSelect(p, $event)" [disabled]="cambiandoEstado()">
+                  @for (e of estados; track e) { <option [value]="e">{{ e }}</option> }
+                </select>
+              </td>
+              <td><button class="btn btn-ghost btn-sm" (click)="verDetalle(p)">Ver</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<!-- Detalle -->
+@if (seleccionado(); as p) {
+  <div class="modal-backdrop" (click)="cerrarDetalle()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal__head">
+        <h3>Pedido {{ p.numeroPedido }}</h3>
+        <button class="modal__close" (click)="cerrarDetalle()" aria-label="Cerrar">×</button>
+      </div>
+      <div class="modal__body">
+        <div class="det-grid">
+          <div><span class="det-lbl">Cliente</span><span>{{ p.nombreCliente }}</span></div>
+          <div><span class="det-lbl">Teléfono</span><span>{{ p.telefonoCliente }}</span></div>
+          <div><span class="det-lbl">Email</span><span>{{ p.emailCliente || '—' }}</span></div>
+          <div><span class="det-lbl">Pago</span><span>{{ p.metodoPago }}</span></div>
+          <div><span class="det-lbl">Fecha</span><span>{{ p.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span></div>
+          <div><span class="det-lbl">Estado</span><span class="badge {{ claseEstado(p.estado) }}">{{ p.estado }}</span></div>
+        </div>
+
+        @if (p.comentario) {
+          <div class="det-coment"><span class="det-lbl">Comentario</span><p>{{ p.comentario }}</p></div>
+        }
+
+        <h4 class="det-h4">Productos</h4>
+        <div class="det-items">
+          @for (it of p.items; track it.id) {
+            <div class="det-item">
+              <span>{{ it.cantidad }}× {{ it.nombreProducto }}</span>
+              <span class="precio">{{ it.subtotal | clp }}</span>
+            </div>
+          }
+          <div class="det-item det-total">
+            <span>Total</span><span class="precio">{{ p.total | clp }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn-ghost" (click)="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+}

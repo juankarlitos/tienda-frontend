@@ -1,0 +1,57 @@
+<div class="container page">
+  <h1 class="section-title">Tu carrito</h1>
+
+  @if (cart.items().length === 0) {
+    <div class="empty-state">
+      <div class="emoji">🛒</div>
+      <h3>Tu carrito está vacío</h3>
+      <p>Agrega productos desde el catálogo para continuar.</p>
+      <a routerLink="/" class="btn btn-primary mt-16">Ir al catálogo</a>
+    </div>
+  } @else {
+    <div class="carrito">
+      <div class="carrito__items">
+        @for (item of cart.items(); track item.producto.id) {
+          <div class="citem">
+            <div class="citem__img">
+              @if (item.producto.imagenUrl) {
+                <img [src]="item.producto.imagenUrl" [alt]="item.producto.nombre" />
+              } @else { <div class="citem__ph">📦</div> }
+            </div>
+            <div class="citem__info">
+              <a class="citem__name" [routerLink]="['/producto', item.producto.id]">{{ item.producto.nombre }}</a>
+              <span class="precio">{{ item.producto.precio | clp }}</span>
+            </div>
+            <div class="citem__qty">
+              <div class="qty">
+                <button (click)="cambiar(item.producto.id, item.producto.stock, item.cantidad, -1)" [disabled]="item.cantidad <= 1">−</button>
+                <span>{{ item.cantidad }}</span>
+                <button (click)="cambiar(item.producto.id, item.producto.stock, item.cantidad, 1)" [disabled]="item.cantidad >= item.producto.stock">+</button>
+              </div>
+            </div>
+            <div class="citem__sub">
+              <span class="precio">{{ item.producto.precio * item.cantidad | clp }}</span>
+              <button class="citem__del" (click)="cart.quitar(item.producto.id)" aria-label="Quitar">🗑</button>
+            </div>
+          </div>
+        }
+        <button class="btn btn-ghost" (click)="cart.vaciar()">Vaciar carrito</button>
+      </div>
+
+      <aside class="resumen card card-pad">
+        <h3>Resumen</h3>
+        <div class="resumen__row">
+          <span>Productos ({{ cart.cantidadTotal() }})</span>
+          <span>{{ cart.montoTotal() | clp }}</span>
+        </div>
+        <div class="resumen__row resumen__total">
+          <span>Total</span>
+          <span class="precio">{{ cart.montoTotal() | clp }}</span>
+        </div>
+        <a routerLink="/checkout" class="btn btn-primary btn-block mt-16">Continuar compra</a>
+        <a routerLink="/" class="btn btn-ghost btn-block mt-8">Seguir comprando</a>
+        <p class="resumen__nota">Sin pago en línea. Coordinas el pago con el vendedor.</p>
+      </aside>
+    </div>
+  }
+</div>

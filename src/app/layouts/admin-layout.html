@@ -1,0 +1,48 @@
+<div class="adm">
+  <!-- Barra superior móvil -->
+  <div class="adm__topbar">
+    <button class="adm__burger" (click)="toggle()" aria-label="Menú">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <app-logo />
+    <span class="adm__topbar-tag">Admin</span>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="adm__side" [class.is-open]="sidebarAbierto()">
+    <div class="adm__side-head">
+      <app-logo [light]="true" />
+      <span class="adm__pill">Panel admin</span>
+    </div>
+
+    <nav class="adm__nav">
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="cerrar()">
+        <span class="ico">📊</span> Dashboard
+      </a>
+      <a routerLink="/admin/productos" routerLinkActive="active" (click)="cerrar()">
+        <span class="ico">📦</span> Productos
+      </a>
+      <a routerLink="/admin/pedidos" routerLinkActive="active" (click)="cerrar()">
+        <span class="ico">🧾</span> Pedidos
+      </a>
+      <a routerLink="/admin/pago" routerLinkActive="active" (click)="cerrar()">
+        <span class="ico">🏦</span> Datos de pago
+      </a>
+    </nav>
+
+    <div class="adm__side-foot">
+      <a routerLink="/" class="adm__back" (click)="cerrar()">← Volver a la tienda</a>
+      <div class="adm__user">{{ auth.usuario()?.nombre }}</div>
+      <button class="btn btn-outline btn-sm w-full" (click)="salir()">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  @if (sidebarAbierto()) {
+    <div class="adm__overlay" (click)="cerrar()"></div>
+  }
+
+  <!-- Contenido -->
+  <main class="adm__main">
+    <router-outlet />
+  </main>
+</div>
