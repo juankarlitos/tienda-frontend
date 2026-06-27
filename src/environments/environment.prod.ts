@@ -1,9 +1,11 @@
 /**
  * Configuración de entorno (producción).
- * Reemplaza estos valores al desplegar (apiUrl del backend en Render, etc.).
+ * apiUrl apunta al backend desplegado en Render.
+ * El número de WhatsApp del vendedor se obtiene en runtime desde /api/config;
+ * el valor de aquí es solo un respaldo.
  */
 export const environment = {
   production: true,
-  apiUrl: 'https://TU-BACKEND.onrender.com',
-  whatsappVendedor: '56912345678',
+  apiUrl: 'https://tienda-backend-xn22.onrender.com',
+  whatsappVendedor: '56957046074',
 };
